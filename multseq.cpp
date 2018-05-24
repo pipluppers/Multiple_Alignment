@@ -71,23 +71,31 @@ string fileSequences(string fileName) {
 }
 
 //  Input:  Table Entries: diag, x, y, z, xy, xz, yz
-//  Output: String of direction of pointer
-string maxPointer(TableEntry xyz, TableEntry x, TableEntry y,
-    TableEntry z, TableEntry xy, TableEntry xz, TableEntry yz) {
-
-    int max2 = max(xyz.val, x.val, y.val, z.val, xy.val, xz.val, yz.val);
-    if (max2 == xyz.val)
+// //  Output: String of direction of pointer
+// string maxPointer(TableEntry xyz, TableEntry x, TableEntry y,
+//     TableEntry z, TableEntry xy, TableEntry xz, TableEntry yz) {
+string maxPointer(int xyz, int x, int y, int z, int xy, int xz, int yz){
+    //int max2 = max(xyz.val, x.val, y.val, z.val, xy.val, xz.val, yz.val);
+    //if (max2 == xyz.val)
+    int max2 = max(xyz,x,y,z,xy,xz,yz);
+    if (max2 == xyz)
         return "xyz";
-    else if (max2 == x.val)
+    //else if (max2 == x.val)
+    else if (max2 == x)
         return "x";
-    else if (max2 == y.val)
+    //else if (max2 == y.val)
+    else if (max2 == y)
         return "y";
-    else if (max2 == z.val)
+    //else if (max2 == z.val)
+    else if (max2 == z)
         return "z";
-    else if (max2 == xy.val)
+    //else if (max2 == xy.val)
+    else if (max2 == xy)
         return "xy";
-    else if (max2 == xz.val)
+    //else if (max2 == xz.val)
+    else if (max2 == xz)
         return "xz";
+    //else {
     else {
         return "yz";
     }
@@ -122,29 +130,86 @@ void DP(vector< vector< vector<TableEntry> > > scores, string seq1,
     
     //  Initialize dummy rows and columns
     int dummyScores = 0;
+    // for (i = 0; i < a; ++i) {
+    //     for (j = 0; j < b; ++j) {
+    //         scores.at(i).at(j).at(0).val = 0 + dummyScores;
+    //         scores.at(i).at(j).at(0).pt = "";
+    //         dummyScores += indel;
+    //     }
+    // }
+    // dummyScores = 0;
+    // for (i = 0; i < a; ++i) {
+    //     for (k = 0; k < c; ++k) {
+    //         scores.at(i).at(0).at(k).val = 0 + dummyScores;
+    //         scores.at(i).at(0).at(k).pt = "";
+    //         dummyScores += indel;
+    //     }
+    // }
+    // dummyScores = 0;
+    // for (j = 0; j < b; ++j) {
+    //     for (k = 0; k < c; ++k) {
+    //         scores.at(0).at(j).at(k).val = 0 + dummyScores;
+    //         scores.at(0).at(j).at(k).pt = "";
+    //         dummyScores += indel;
+    //     }
+    // }
+    scores.at(0).at(0).at(0).val = 0;
+    scores.at(0).at(0).at(0).pt = "";
     for (i = 0; i < a; ++i) {
-        for (j = 0; j < b; ++j) {
-            scores.at(i).at(j).at(0).val = 0 + dummyScores;
-            scores.at(i).at(j).at(0).pt = "";
-            dummyScores += indel;
+        scores.at(i).at(0).at(0).val = 0 + dummyScores;
+        scores.at(i).at(0).at(0).pt = "z";
+        dummyScores += 2*indel;
+        for (j = 1; j < b; ++j) {
+            scores.at(i).at(j).at(0).val = 
+                scores.at(i).at(j-1).at(0).val + 2 * indel;
+            scores.at(i).at(j).at(0).pt = "x";
+        }
+        for (k = 1; k < c; ++k) {
+            scores.at(i).at(0).at(k).val = 
+                scores.at(i).at(0).at(k-1).val + 2*indel;
+            scores.at(i).at(0).at(k).pt = "y";
         }
     }
-    dummyScores = 0;
-    for (i = 0; i < a; ++i) {
-        for (k = 0; k < c; ++k) {
-            scores.at(i).at(0).at(k).val = 0 + dummyScores;
-            scores.at(i).at(0).at(k).pt = "";
-            dummyScores += indel;
+    for (j = 1; j < b; ++j) {
+        for (k = 1; k < c; ++k) {
+            scores.at(0).at(j).at(k).val = 
+                scores.at(0).at(j-1).at(k-1).val + indel;
+            scores.at(0).at(j).at(k).pt = "xy";
         }
     }
-    dummyScores = 0;
-    for (j = 0; j < b; ++j) {
-        for (k = 0; k < c; ++k) {
-            scores.at(0).at(j).at(k).val = 0 + dummyScores;
-            scores.at(0).at(j).at(k).pt = "";
-            dummyScores += indel;
+    
+    for (i = 1; i < a; ++i) {
+        for (j = 1; j < b; ++j) {
+            scores.at(i).at(j).at(0).val =
+                scores.at(i-1).at(j-1).at(0).val + indel;
+            scores.at(i).at(j).at(0).pt = "xz";
         }
     }
+    
+    for (i = 1; i < a; ++i) {
+        for (k = 1; k < c; ++k) {
+            scores.at(i).at(0).at(k).val =
+                scores.at(i-1).at(0).at(k-1).val + indel;
+            scores.at(i).at(0).at(k).pt = "xy";
+        }
+    }
+    
+    
+    
+    // for (i = 0; i < a; ++i) {
+    //     for (j = 0; j < b; ++j) {
+    //         for (k = 0; k < c; ++k) {
+    //             cout << scores.at(i).at(j).at(k).val << "\t";
+    //         }
+    //         cout << endl;
+    //     }
+    //     cout << endl;
+    // }
+    
+    
+    
+    
+    
     
     //  Recurrence Relation and filling the Table
     for (i = 1; i < a; ++i) {
@@ -205,13 +270,23 @@ void DP(vector< vector< vector<TableEntry> > > scores, string seq1,
                 }
                 scores.at(i).at(j).at(k).val = max(xyz, x, y, z, xy,
                     xz, yz);
+                // scores.at(i).at(j).at(k).pt = maxPointer(
+                //     scores.at(i-1).at(j-1).at(k-1), 
+                //     scores.at(i-1).at(j).at(k), scores.at(i).at(j-1).at(k),
+                //     scores.at(i).at(j).at(k-1),
+                //     scores.at(i-1).at(j-1).at(k),
+                //     scores.at(i-1).at(j).at(k-1),
+                //     scores.at(i).at(j-1).at(k-1));
                 scores.at(i).at(j).at(k).pt = maxPointer(
-                    scores.at(i-1).at(j-1).at(k-1), 
-                    scores.at(i-1).at(j).at(k), scores.at(i).at(j-1).at(k),
-                    scores.at(i).at(j).at(k-1),
-                    scores.at(i-1).at(j-1).at(k),
-                    scores.at(i-1).at(j).at(k-1),
-                    scores.at(i).at(j-1).at(k-1));
+                    xyz, 
+                    x, y,
+                    z,
+                    xy,
+                    xz,
+                    yz);
+                if (i ==2 && j == 2 && k ==2) {
+                    cout << xyz << endl;
+                }
             }        
         }
         
@@ -220,21 +295,112 @@ void DP(vector< vector< vector<TableEntry> > > scores, string seq1,
     }
     
     for (i = 0; i < a; ++i) {
-            for (j = 0; j < b; ++j) {
-                for (k = 0; k < c; ++k) {
-                    cout << scores.at(i).at(j).at(k).val << "\t";
-                }
-                cout << endl;
+        for (j = 0; j < b; ++j) {
+            for (k = 0; k < c; ++k) {
+                cout << scores.at(i).at(j).at(k).val << "\t";
             }
             cout << endl;
         }
+        cout << endl;
+    }
+    
+    cout << scores.at(2).at(2).at(2).pt << endl;
+    
+    //  Traceback
+    i = a-1, j = b-1, k = c-1;
+    while (i > 0 || j > 0 || k > 0) {
+        if (i == 0 && j == 0) {
+            res1 = "-" + res1;
+            res2 = "-" + res2;
+            res3 = seq3.at(k-1) + res3;
+            --k;
+        }
+        else if (i == 0 && k == 0) {
+            res1 = "-" + res1;
+            res2 = seq2.at(j-1) + res2;
+            res3 = "-" + res3;
+            --j;
+        }
+        else if (j == 0 && k == 0) {
+            res1 = seq1.at(i-1) + res1;
+            res2 = "-" + res2;
+            res3 = "-" + res3;
+            --i;
+        }
+        else if (i == 0) {
+            res1 = "-" + res1;
+            res2 = seq2.at(j-1) + res2;
+            res3 = seq3.at(k-1) + res3;
+            --j; --k;
+        }
+        else if (j == 0) {
+            res1 = seq1.at(i-1) + res1;
+            res2 = "-" + res2;
+            res3 = seq3.at(k-1) + res3;
+            --i; --k;
+        }
+        else if (k == 0) {
+            res1 = seq1.at(i-1) + res1;
+            res2 = seq2.at(j-1) + res2;
+            res3 = "-" + res3;
+            --i; --j;
+        }
+        else if (scores.at(i).at(j).at(k).pt == "xyz") {
+            res1 = seq1.at(i-1) + res1;
+            res2 = seq2.at(j-1) + res2;
+            res3 = seq3.at(k-1) + res3;
+            --i; --j; --k;
+        }
+        else if (scores.at(i).at(j).at(k).pt == "xy") {
+            res1 = seq1.at(i-1) + res1;
+            res2 = seq2.at(j-1) + res2;
+            res3 = "-" + res3;
+            --i; --j;
+        }
+        else if (scores.at(i).at(j).at(k).pt == "xz") {
+            res1 = seq1.at(i-1) + res1;
+            res2 = "-" + res2;
+            res3 = seq3.at(k-1) + res3;
+            --i; --k;
+        }
+        else if (scores.at(i).at(j).at(k).pt == "yz") {
+            res1 = "-" + res1;
+            res2 = seq2.at(j-1) + res2;
+            res3 = seq3.at(k-1) + res3;
+            --j; --k;
+        }
+        else if (scores.at(i).at(j).at(k).pt == "x") {
+            res1 = seq1.at(i-1) + res1;
+            res2 = "-" + res2;
+            res3 = "-" + res3;
+            --i;
+        }
+        else if (scores.at(i).at(j).at(k).pt == "y") {
+            res1 = "-" + res1;
+            res2 = seq2.at(j-1) + res2;
+            res3 = "-" + res3;
+            --j;
+        }
+        else if (scores.at(i).at(j).at(k).pt == "z") {
+            res1 = "-" + res1;
+            res2 = "-" + res2;
+            res3 = seq3.at(k-1) + res3;
+            --k;
+        }
+        
+        
+        
+        
+        
+        
+    }
     
     
 }
 
 int main() {
     //  Testing max  ---- WORKS
-    cout << max(41,60,4, 5, 10, 30, 40) << endl;
+    // cout << max(41,60,4, 5, 10, 30, 40) << endl;
     
     //  Testing fileSequences --- WORKS
     string seq1 = "", seq2 = "", seq3 = "";
@@ -249,6 +415,8 @@ int main() {
     string result1 = "", result2 = "", result3 = "";    
 
     DP(A, seq1, seq2, seq3, result1, result2, result3);
+    
+    cout << result1 << endl << result2 << endl << result3 << endl;
     
     return 0;
 }
