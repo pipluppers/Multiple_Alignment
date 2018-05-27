@@ -1,5 +1,5 @@
 # Multiple_Alignment
-Thanks to Dr. Tao Jiang for overseeing this project at UCR for CS 238: Algorithmic Techniques in Computational Biology. 
+## Thanks to Dr. Tao Jiang for overseeing this project at UCR for CS 238: Algorithmic Techniques in Computational Biology. 
 
 Input: 5x5 Scoring Matrix, 3 sequences with alphabet {A,C,G,T}
 
