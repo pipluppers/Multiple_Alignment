@@ -21,6 +21,14 @@ const int match = 5;
 const int mismatch2 = -4;
 const int indel = -8;
 
+string ReverseString(string abc) {
+    string str = "";
+    for (int i = abc.size() - 1; i >= 0; --i) {
+        str += abc.at(i);
+    }
+    return str;
+}
+
 //  -----------------------------GETSCORE WORKS-------------------
 
 // Gets the Scoring Matrix from user & converts all scores into ints
@@ -146,17 +154,17 @@ void initTable(vector< vector< vector<TableEntry> > > &scores,
     scores.at(0).at(0).at(0).pt = "";
     for (i = 0; i < a; ++i) {
         scores.at(i).at(0).at(0).val = 0 + dummyScores;
-        scores.at(i).at(0).at(0).pt = "z";
+        scores.at(i).at(0).at(0).pt = "x";
         dummyScores += 2*indel;
         for (j = 1; j < b; ++j) {
             scores.at(i).at(j).at(0).val = 
                 scores.at(i).at(j-1).at(0).val + 2 * indel;
-            scores.at(i).at(j).at(0).pt = "x";
+            scores.at(i).at(j).at(0).pt = "y";
         }
         for (k = 1; k < c; ++k) {
             scores.at(i).at(0).at(k).val = 
                 scores.at(i).at(0).at(k-1).val + 2*indel;
-            scores.at(i).at(0).at(k).pt = "y";
+            scores.at(i).at(0).at(k).pt = "z";
         }
     }
     
@@ -167,7 +175,7 @@ void initTable(vector< vector< vector<TableEntry> > > &scores,
         for (k = 1; k < c; ++k) {
             scores.at(0).at(j).at(k).val = 
                 scores.at(0).at(j-1).at(k-1).val + 2*indel;
-            scores.at(0).at(j).at(k).pt = "xy";
+            scores.at(0).at(j).at(k).pt = "yz";
         }
     }
     
@@ -175,7 +183,7 @@ void initTable(vector< vector< vector<TableEntry> > > &scores,
         for (j = 1; j < b; ++j) {
             scores.at(i).at(j).at(0).val =
                 scores.at(i-1).at(j-1).at(0).val + 2*indel;
-            scores.at(i).at(j).at(0).pt = "xz";
+            scores.at(i).at(j).at(0).pt = "xy";
         }
     }
     
@@ -183,7 +191,7 @@ void initTable(vector< vector< vector<TableEntry> > > &scores,
         for (k = 1; k < c; ++k) {
             scores.at(i).at(0).at(k).val =
                 scores.at(i-1).at(0).at(k-1).val + 2*indel;
-            scores.at(i).at(0).at(k).pt = "xy";
+            scores.at(i).at(0).at(k).pt = "xz";
         }
     } 
     
@@ -454,6 +462,98 @@ void DP(vector< vector< vector<TableEntry> > > scores,
 }
 
 
+void Create2DMat(vector< vector<TableEntry> > &vect, 
+    vector< vector<TableEntry> >&vect2, int rowsize,
+    int colsize, string seq1, string seq2, string seq3) {
+    
+    unsigned i,j,k;
+    int m = seq1.size() + 1;
+    
+    vect.resize(rowsize);
+    vect2.resize(rowsize);
+    for (i = 0; i < rowsize; ++i) {
+        vect.at(i).resize(colsize);
+        vect2.at(i).resize(colsize);
+    }
+    vect.at(0).at(0).val = 0;
+    vect.at(0).at(0).pt = ""; vect.at(0).at(0).s1 = " ";
+    vect.at(0).at(0).s2 = " "; vect.at(0).at(0).s3 = " ";
+    int dummyScore = 2 * indel;
+    for (j = 1; j < rowsize; ++j) {
+        vect.at(j).at(0).val = dummyScore;
+        vect.at(j).at(0).pt = "x";
+        dummyScore += 2 * indel;
+    }
+    dummyScore = 2*indel;
+    for (k = 1; k < colsize; ++k) {
+        vect.at(0).at(k).val = dummyScore;
+        vect.at(0).at(k).pt = "y";
+        dummyScore += 2 * indel;
+    }
+    for (j = 1; j < rowsize; ++j) {
+        for (k = 1; k < colsize; ++k) {
+            vect.at(j).at(k).val = vect.at(j-1).at(k-1).val + 
+                2 * indel;
+            vect.at(j).at(k).pt = "xy";
+        }
+    }
+    
+    int xyz, x, y, z, xy, xz, yz;
+    for (i = 1; i < m; ++i) {
+        vect2.at(0).at(0).val = 2*indel;
+        vect2.at(0).at(0).pt = "x";
+        for (j = 1; j < rowsize; ++j) {
+            vect2.at(j).at(0).val = vect.at(j-1).at(0).val + 2*indel;
+        }
+        for (k = 1; k < colsize; ++k) {
+            vect2.at(0).at(k).val = vect.at(0).at(k-1).val + 2*indel;
+        }
+        for (j = 1; j < rowsize; ++j) {
+            for (k = 1; k < colsize; ++k) {
+                xyz = vect.at(j-1).at(k-1).val;
+                if (seq1.at(i-1) == seq2.at(j-1))
+                    xyz += match;
+                else
+                    xyz += mismatch2;
+                if (seq1.at(i-1) == seq3.at(k-1))
+                    xyz += match;
+                else
+                    xyz += mismatch2;
+                if (seq2.at(j-1) == seq3.at(k-1))
+                    xyz += match;
+                else
+                    xyz += mismatch2;
+                
+                x = vect.at(j).at(k).val + 2*indel;
+                y = vect2.at(j-1).at(k).val + 2*indel;
+                z = vect2.at(j).at(k-1).val + 2*indel;
+                
+                //  Compare seq1 with seq2
+                xy = vect.at(j-1).at(k).val + 2*indel;
+                if (seq1.at(i-1) == seq2.at(j-1))
+                    xy += match;
+                else
+                    xy += mismatch2;
+                //  Compare seq1 with seq3
+                xz = vect.at(j).at(k-1).val + 2*indel;
+                if (seq1.at(i-1) == seq3.at(k-1))
+                    xz += match;
+                else
+                    xz += mismatch2;
+                //  Compare seq2 with seq3
+                yz = vect2.at(j-1).at(k-1).val + 2*indel;
+                if (seq2.at(j-1) == seq3.at(k-1))
+                    yz += match;
+                else
+                    yz += mismatch2;
+                vect2.at(j).at(k).val = max(xyz, x, y, z, xy, xz, yz);
+                vect2.at(j).at(k).pt = maxPointer(xyz, x, y, z, xy,xz,yz);
+            }
+        }
+        vect = vect2;
+    }
+}
+
 //  We shall slice the z-axis
 void spaceSavingDP(vector< vector< vector<TableEntry> > > scores,
     string seq1, string seq2, string seq3,
@@ -462,12 +562,10 @@ void spaceSavingDP(vector< vector< vector<TableEntry> > > scores,
     // scores.at(i).at(j).size() is the size of seq3
     // scores.at(i).size() is the size of seq2
     // scores.size() is the size of seq1
-    
-    unsigned i, j, k, m;
+    unsigned i, j, m;
     unsigned a = scores.size(), b = scores.at(1).size();
     unsigned c = scores.at(0).at(0).size();
     
-    //  If a is even, there are odd levels b/c of dummy
     m = a/2 + 1;
     cout << "m = " << m << endl;
     
@@ -486,27 +584,102 @@ void spaceSavingDP(vector< vector< vector<TableEntry> > > scores,
     //  Recursive Step
     //      oh is the vector for the "other half"
     //      fhseq1 is the first half sequence
-    vector< vector< vector<TableEntry> > > fh;
-    vector< vector< vector<TableEntry> > > oh;
+    //vector< vector< vector<TableEntry> > > fh;
+    //vector< vector< vector<TableEntry> > > oh;
     string fhseq1 = "", ohseq1 = "", ohseq2 = "", ohseq3 = "";
     ohseq2 = seq2;
     ohseq3 = seq3;
     for (i = 1; i < m; ++i) {
         fhseq1 += seq1.at(i-1);
     }
-    for (i = m; i < a; ++i) {
+    for (i = a - 1; i >= m; --i) {
         ohseq1 += seq1.at(i-1);
     }
-    //cout << ohseq1 << endl;
+    ohseq2 = ReverseString(seq2);
+    ohseq3 = ReverseString(seq3);
     //  Create the tables of the two halves
-    initTable(fh, fhseq1, seq2, seq3);
-    initTable(oh, ohseq1, ohseq2, ohseq3);
+    // initTable(fh, fhseq1, seq2, seq3);
+    // initTable(oh, ohseq1, ohseq2, ohseq3);
     cout << fhseq1 << endl;
     cout << ohseq1 << endl << ohseq2 << endl << ohseq3 << endl;
+    
+    vector< vector<TableEntry> > fh1, fh2;
+    vector< vector<TableEntry> > oh1, oh2;
+    
+    //Create2DMat(fh1, fh2, b, c);
+    Create2DMat(fh1, fh2, b, c,fhseq1, seq2, seq3);
+    Create2DMat(oh1, oh2, b, c,ohseq1, ohseq2, ohseq3);
+    
+    // int xyz, x, y, z, xy, xz, yz;
+    // for (i = 1; i < m; ++i) {
+    //     fh2.at(0).at(0).val = 2*indel;
+    //     fh2.at(0).at(0).pt = "x";
+    //     for (j = 1; j < b; ++j) {
+    //         fh2.at(j).at(0).val = fh1.at(j-1).at(0).val + 2*indel;
+    //     }
+    //     for (k = 1; k < c; ++k) {
+    //         fh2.at(0).at(k).val = fh1.at(0).at(k-1).val + 2*indel;
+    //     }
+    //     for (j = 1; j < b; ++j) {
+    //         for (k = 1; k < c; ++k) {
+    //             xyz = fh1.at(j-1).at(k-1).val;
+    //             if (fhseq1.at(i-1) == seq2.at(j-1))
+    //                 xyz += match;
+    //             else
+    //                 xyz += mismatch2;
+    //             if (fhseq1.at(i-1) == seq3.at(k-1))
+    //                 xyz += match;
+    //             else
+    //                 xyz += mismatch2;
+    //             if (seq2.at(j-1) == seq3.at(k-1))
+    //                 xyz += match;
+    //             else
+    //                 xyz += mismatch2;
+                
+    //             x = fh1.at(j).at(k).val + 2*indel;
+    //             y = fh2.at(j-1).at(k).val + 2*indel;
+    //             z = fh2.at(j).at(k-1).val + 2*indel;
+                
+    //             //  Compare seq1 with seq2
+    //             xy = fh1.at(j-1).at(k).val + 2*indel;
+    //             if (fhseq1.at(i-1) == seq2.at(j-1))
+    //                 xy += match;
+    //             else
+    //                 xy += mismatch2;
+    //             //  Compare seq1 with seq3
+    //             xz = fh1.at(j).at(k-1).val + 2*indel;
+    //             if (fhseq1.at(i-1) == seq3.at(k-1))
+    //                 xz += match;
+    //             else
+    //                 xz += mismatch2;
+    //             //  Compare seq2 with seq3
+    //             yz = fh2.at(j-1).at(k-1).val + 2*indel;
+    //             if (seq2.at(j-1) == seq3.at(k-1))
+    //                 yz += match;
+    //             else
+    //                 yz += mismatch2;
+    //             fh2.at(j).at(k).val = max(xyz, x, y, z, xy, xz, yz);
+    //             fh2.at(j).at(k).pt = maxPointer(xyz, x, y, z, xy,xz,yz);
+    //         }
+    //     }
+    //     fh1 = fh2;
+    // }
+    
+    
+    
+    for (i = 0; i < b; ++i) {
+        for (j = 0; j < c; ++j) {
+            cout << fh2.at(i).at(j).val << " ";
+        }
+        cout << endl;
+    }
+    for (i = 0; i < b; ++i) {
+        for (j = 0; j < c; ++j) {
+            cout << oh2.at(i).at(j).val << " ";
+        }
+        cout << endl;
+    }
 }
-
-
-
 
 
 int main() {
