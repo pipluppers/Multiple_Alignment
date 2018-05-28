@@ -761,13 +761,16 @@ int main() {
     //  Testing fileSequences --- WORKS
     string seq1 = "", seq2 = "", seq3 = "";
     //seq1 = fileSequences("seq1.txt");
-    seq1 = fileSequences("OneR556.txt");
+    //seq1 = fileSequences("OneR556.txt");
+    seq1 = fileSequences("TwoM1792.txt");
     //cout << seq1 << "\tz-axis" << endl;
+    
     //seq2 = fileSequences("seq2.txt");
-    seq2 = fileSequences("OneM569.txt");
+    seq2 = fileSequences("TwoH2628.txt");
     //cout << seq2 << "\tx-axis" << endl;
     //seq3 = fileSequences("seq3.txt");
-    seq3 = fileSequences("OneH627.txt");
+    //seq3 = fileSequences("OneH627.txt");
+    seq3 = fileSequences("TwoS1825.txt");
     //cout << seq3 << "\ty-axis" << endl;
     
     GetScore("scoreMat.txt", aa, ac, ag, at, cc, cg, ct, gg, gt,
