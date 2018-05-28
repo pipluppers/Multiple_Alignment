@@ -195,6 +195,7 @@ void initTable(vector< vector< vector<TableEntry> > > &scores,
         }
     } 
     
+    //  Apply strings to the table entries
     for (i = 0; i < a; ++i) {
         for (j = 0; j < b; ++j) {
             for (k = 0; k < c; ++k) {
@@ -219,6 +220,7 @@ void initTable(vector< vector< vector<TableEntry> > > &scores,
             }
         }
     }
+    // {
     // cout << "-----------------" << endl;
     // cout << "000: " << scores.at(0).at(0).at(0).s1 << 
     //     scores.at(0).at(0).at(0).s2 << scores.at(0).at(0).at(0).s3
@@ -276,6 +278,7 @@ void initTable(vector< vector< vector<TableEntry> > > &scores,
     //     scores.at(1).at(2).at(2).s2 << scores.at(1).at(2).at(2).s3
     //     << endl;
     // cout << "-------------------------" << endl;
+    // }
 }
 
 //  Inputs: 3D array of scores, 3 sequences, 3 strings for results
@@ -367,15 +370,15 @@ void DP(vector< vector< vector<TableEntry> > > scores,
     }
     
     //  Just outputting to test
-    for (i = 0; i < a; ++i) {
-        for (j = 0; j < b; ++j) {
-            for (k = 0; k < c; ++k) {
-                cout << scores.at(i).at(j).at(k).val << "\t";
-            }
-            cout << endl;
-        }
-        cout << endl;
-    }
+    // for (i = 0; i < a; ++i) {
+    //     for (j = 0; j < b; ++j) {
+    //         for (k = 0; k < c; ++k) {
+    //             cout << scores.at(i).at(j).at(k).val << "\t";
+    //         }
+    //         cout << endl;
+    //     }
+    //     cout << endl;
+    // }
     
     //  Traceback
     i = a-1, j = b-1, k = c-1;
@@ -459,8 +462,8 @@ void DP(vector< vector< vector<TableEntry> > > scores,
             --k;
         }
     }
-    cout << res1 << endl << res2 << endl << res3 << endl;
-    cout << "Leaving DP" << endl;
+    //cout << res1 << endl << res2 << endl << res3 << endl;
+    //cout << "Leaving DP" << endl;
 }
 
 //  Create the 2D matrices for space saving. Returns the final matrix
@@ -568,14 +571,16 @@ void spaceSavingDP( string seq1, string seq2, string seq3,
     unsigned a = seq1.size() + 1, b = seq2.size() + 1;
     unsigned c = seq3.size() + 1;
     
+    //cout << seq1 << endl << seq2 << endl << seq3 << endl;
+    
     m = a/2 + 1;
-    cout << "m = " << m << endl;
+    //cout << "m = " << m << endl;
     
     //  Base Case:
     //      When a sequence has 0 or 1 characters
     //      Just compute normal Dynamic Programming
-    if (m == 0 || m == 1 || a == 3) {
-        cout << "Something degenerated" << endl;
+    if (m == 0 || m == 1 || a == 3 || b == 2 || c == 2) {
+        //cout << "Something degenerated" << endl;
         string r1, r2, r3;
         vector< vector< vector<TableEntry> > > scores;
         initTable(scores, seq1, seq2, seq3);
@@ -589,8 +594,6 @@ void spaceSavingDP( string seq1, string seq2, string seq3,
     //  Recursive Step
     //      oh is the vector for the "other half"
     //      fhseq1 is the first half sequence
-    //vector< vector< vector<TableEntry> > > fh;
-    //vector< vector< vector<TableEntry> > > oh;
     string fhseq1 = "", ohseq1 = "", ohseq2 = "", ohseq3 = "";
     ohseq2 = seq2;
     ohseq3 = seq3;
@@ -603,18 +606,14 @@ void spaceSavingDP( string seq1, string seq2, string seq3,
     ohseq2 = ReverseString(seq2);
     ohseq3 = ReverseString(seq3);
     //  Create the tables of the two halves
-    // initTable(fh, fhseq1, seq2, seq3);
-    // initTable(oh, ohseq1, ohseq2, ohseq3);
-    cout << fhseq1 << endl;
-    cout << ohseq1 << endl << ohseq2 << endl << ohseq3 << endl;
+    // cout << fhseq1 << endl;
+    // cout << ohseq1 << endl << ohseq2 << endl << ohseq3 << endl;
     
     vector< vector<TableEntry> > fh1, fh2;
     vector< vector<TableEntry> > oh1, oh2;
     
-    //Create2DMat(fh1, fh2, b, c);
     Create2DMat(fh1, fh2, b, c,fhseq1, seq2, seq3);
     Create2DMat(oh1, oh2, b, c,ohseq1, ohseq2, ohseq3);
-    
     // int xyz, x, y, z, xy, xz, yz;
     // for (i = 1; i < m; ++i) {
     //     fh2.at(0).at(0).val = 2*indel;
@@ -670,20 +669,18 @@ void spaceSavingDP( string seq1, string seq2, string seq3,
     //     fh1 = fh2;
     // }
     
-    
-    
-    for (i = 0; i < b; ++i) {
-        for (j = 0; j < c; ++j) {
-            cout << fh2.at(i).at(j).val << " ";
-        }
-        cout << endl;
-    }
-    for (i = 0; i < b; ++i) {
-        for (j = 0; j < c; ++j) {
-            cout << oh2.at(i).at(j).val << " ";
-        }
-        cout << endl;
-    }
+    // for (i = 0; i < b; ++i) {
+    //     for (j = 0; j < c; ++j) {
+    //         cout << fh2.at(i).at(j).val << " ";
+    //     }
+    //     cout << endl;
+    // }
+    // for (i = 0; i < b; ++i) {
+    //     for (j = 0; j < c; ++j) {
+    //         cout << oh2.at(i).at(j).val << " ";
+    //     }
+    //     cout << endl;
+    // }
     
     int max = -1000000;
     int value;
@@ -697,9 +694,10 @@ void spaceSavingDP( string seq1, string seq2, string seq3,
             }
         }
     }
-    cout << "Final Max: " << max << endl;
-    cout << "Maxj: " << maxj << endl;
-    cout << "Maxk: " << maxk << endl;
+    
+    // cout << "Final Max: " << max << endl;
+    // cout << "Maxj: " << maxj << endl;
+    // cout << "Maxk: " << maxk << endl;
     
     //  FH
     //      Cut Half the matrix along i away (fhseq1)
@@ -712,48 +710,65 @@ void spaceSavingDP( string seq1, string seq2, string seq3,
     for (i = 0; i < maxk; ++i) {
         fhseq3 += seq3.at(i);
     }
-    cout << "fhseq2: " << fhseq2 << endl << "fhseq3: " << fhseq3 << endl;
+    //cout << "fhseq2: " << fhseq2 << endl << "fhseq3: " << fhseq3 << endl;
     
+    //  OH
+    //      seq1 m:a
+    //      seq2 maxj:b-2
+    //      seq3 maxk:c-2
     string ohseqalt2 = "", ohseqalt3 = "";
-    cout << b << endl;
-    cout << maxj << endl;
+    // -----------------------------------------------------------
+    // cout << "b: " << b << endl;
+    // cout << "maxj: " << maxj << endl;
+    // cout << seq1 << endl;
+    // cout << seq2 << endl;
     for (int d = b - 2; d >= maxj; --d) {
         ohseqalt2 += seq2.at(d);
     }
+    
     for (int d = c - 2; d >= maxk; --d) {
         ohseqalt3 += seq3.at(d);
     }
-    cout << "ohseq2: " << ohseqalt2 << endl;
-    cout << "ohseq3: " << ohseqalt3 << endl;
+    // cout << "ohseq2: " << ohseqalt2 << endl;
+    // cout << "ohseq3: " << ohseqalt3 << endl;
     
-    cout << "-------------RECURSION 1--------------" << endl;
+    //cout << "-------------RECURSION 1--------------" << endl;
     string str1 = "", str2 = "", str3 = "", str4 = "", str5 = "", str6= "";
+    
     spaceSavingDP(fhseq1, fhseq2, fhseq3, str1, str2, str3);
     
-    cout << "-------------RECURSION 2--------------" << endl;
+    //cout << "-------------RECURSION 2--------------" << endl;
     spaceSavingDP(ohseq1, ohseqalt2, ohseqalt3, str4, str5, str6);
     
-    res1 = str1 + res1 + str4;
-    res2 = str2 + res2 + str5;
-    res3 = str3 + res3 + str6;
+    string str7, str8, str9;
+    str7 = ReverseString(str4), str8 = ReverseString(str5);
+    str9 = ReverseString(str6);
+    
+    res1 = str1 + res1 + str7;
+    res2 = str2 + res2 + str8;
+    res3 = str3 + res3 + str9;
     
 }
 
 
 int main() {
-    //  Testing max  ---- WORKS
-    // cout << max(41,60,4, 5, 10, 30, 40) << endl;
     
+    //  For the Scores of the Scoring Matrix
     int aa, ac, ag, at, cc, cg, ct, gg, gt, tt, ab, cb, gb, tb,bb;
+    
+    unsigned i;
     
     //  Testing fileSequences --- WORKS
     string seq1 = "", seq2 = "", seq3 = "";
-    seq1 = fileSequences("seq1.txt");
-    cout << seq1 << "\tz-axis" << endl;
-    seq2 = fileSequences("seq2.txt");
-    cout << seq2 << "\tx-axis" << endl;
-    seq3 = fileSequences("seq3.txt");
-    cout << seq3 << "\ty-axis" << endl;
+    //seq1 = fileSequences("seq1.txt");
+    seq1 = fileSequences("OneR556.txt");
+    //cout << seq1 << "\tz-axis" << endl;
+    //seq2 = fileSequences("seq2.txt");
+    seq2 = fileSequences("OneM569.txt");
+    //cout << seq2 << "\tx-axis" << endl;
+    //seq3 = fileSequences("seq3.txt");
+    seq3 = fileSequences("OneH627.txt");
+    //cout << seq3 << "\ty-axis" << endl;
     
     GetScore("scoreMat.txt", aa, ac, ag, at, cc, cg, ct, gg, gt,
         tt, ab, cb, gb, tb, bb);
@@ -781,6 +796,84 @@ int main() {
     spaceSavingDP(seq1, seq2, seq3, result1, result2, result3);
     
     cout << result1 << endl << result2 << endl << result3 << endl;
+    int length = result1.size();
+    int counter = 0, score = 0;
+    cout << "Length of alignment: " << length << endl;
+    
+    
+    for (i = 0; i < length; ++i) {
+        if (result1.at(i) == result2.at(i) && 
+            result2.at(i) == result3.at(i)) {
+            ++counter;
+            score += 3*match;
+        }
+        else if (result1.at(i) == result2.at(i) && 
+            result1.at(i) != result3.at(i) && result1.at(i) != '-' &&
+            result3.at(i) != '-') {
+            score += match + 2*mismatch2; 
+        }
+        else if (result1.at(i) == result3.at(i) && 
+            result1.at(i) != result2.at(i) && result1.at(i) != '-' &&
+            result2.at(i) != '-') {
+            score += match + 2*mismatch2; 
+        }
+        else if (result2.at(i) == result3.at(i) && 
+            result1.at(i) != result3.at(i) && result1.at(i) != '-' &&
+            result3.at(i) != '-') {
+            score += match + 2*mismatch2; 
+        }
+        
+        
+        else if (result1.at(i) != result2.at(i) && result3.at(i) != '-' &&
+            result2.at(i) != result3.at(i) && result2.at(i) != '-' &&
+            result3.at(i) != result1.at(i) && result1.at(i) != '-') {
+            score += 3*mismatch2;   
+        }
+        
+        else if (result1.at(i) == result2.at(i) && 
+            result2.at(i) != result3.at(i) && result2.at(i) != '-' &&
+            result3.at(i) == '-') {
+            score += match + 2*indel;
+        }
+        else if (result1.at(i) == result3.at(i) && 
+            result2.at(i) != result3.at(i) && result2.at(i) != '-' &&
+            result3.at(i) == '-') {
+            score += match + 2*indel;
+        }
+        else if (result2.at(i) == result3.at(i) && 
+            result1.at(i) != result3.at(i) && result1.at(i) != '-' &&
+            result3.at(i) == '-') {
+            score += match + 2*indel;
+        }
+        
+        
+        
+        else if (result1.at(i) == result2.at(i) && 
+            result1.at(i) != result3.at(i) && result1.at(i) == '-' &&
+            result3.at(i) != '-') {
+            score += 2*indel;
+        }
+        else if (result1.at(i) == result3.at(i) && 
+            result1.at(i) != result2.at(i) && result1.at(i) == '-' &&
+            result2.at(i) != '-') {
+            score += 2*indel;
+        }
+        else if (result2.at(i) == result3.at(i) && 
+            result1.at(i) != result3.at(i) && result1.at(i) == '-' &&
+            result3.at(i) != '-') {
+            score += 2*indel;
+        }
+        
+        else {
+            cout << "I forgot something" << endl;
+        }
+    }
+    cout << "Score: " << score << endl;
+    cout << "Number of columns perfectly matched: " << counter << endl;
+    
+    for (i = 0; i < length; ++i) {
+        
+    }
     
     cout << "\nDon't forget to add functionality for applying the "
         << "scores\n";
