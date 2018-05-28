@@ -141,6 +141,9 @@ void initTable(vector< vector< vector<TableEntry> > > &scores,
 	//	Error Check
 	if (a == 1 || b == 1 || c == 1) {
 		cout << "One sequence is empty" << endl;
+		cout << "Seq1 size: " << a << " - 1 = " << a - 1 << endl;
+		cout << "Seq2 size: " << b << " - 1 = " << b - 1 << endl;
+		cout << "Seq3 size: " << c << " - 1 = " << c - 1 << endl;
 		//return;
 	}
 
