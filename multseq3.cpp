@@ -140,13 +140,13 @@ void initTable(vector< vector< vector<TableEntry> > > &scores,
     unsigned a = seq1.size()+1, b = seq2.size()+1, c = seq3.size()+1;
     
 	//	Error Check
-	if (a == 1 || b == 1 || c == 1) {
-		cout << "One sequence is empty" << endl;
-		cout << "Seq1 size: " << a << " - 1 = " << a - 1 << endl;
-		cout << "Seq2 size: " << b << " - 1 = " << b - 1 << endl;
-		cout << "Seq3 size: " << c << " - 1 = " << c - 1 << endl;
-		//return;
-	}
+	//if (a == 1 || b == 1 || c == 1) {
+	//	cout << "One sequence is empty" << endl;
+	//	cout << "Seq1 size: " << a << " - 1 = " << a - 1 << endl;
+	//	cout << "Seq2 size: " << b << " - 1 = " << b - 1 << endl;
+	//	cout << "Seq3 size: " << c << " - 1 = " << c - 1 << endl;
+	//	//return;
+	//}
 
     //  Create the 3D matrix
     scores.resize(a);
@@ -178,12 +178,9 @@ void initTable(vector< vector< vector<TableEntry> > > &scores,
             scores.at(i).at(0).at(k).pt = "z";
         }
     }
-   
 	//	Error Check
-	if (a == 1 || b == 1 || c == 1) {
-		cout << "InitTable: Survived the dummy column initializations" << endl;
-	}
-
+	//if (a == 1 || b == 1 || c == 1)
+	//	cout << "InitTable: Survived the dummy column initializations" << endl;
  
     //  These next 3 outer loops were originally just adding 
     //      indel instead of 2*indel. Checking if it gives 
@@ -214,11 +211,8 @@ void initTable(vector< vector< vector<TableEntry> > > &scores,
     
 
 	//	Error Checks
-	if (a == 1 || b == 1 || c == 1) {
-		cout << "InitTable: Survived iniatilizeing mutliple dummies at once" << endl;
-	}
-
-
+//	if (a == 1 || b == 1 || c == 1)
+//		cout << "InitTable: Survived iniatilizeing mutliple dummies at once" << endl;
 
     //  Apply strings to the table entries
     for (i = 0; i < a; ++i) {
@@ -247,76 +241,15 @@ void initTable(vector< vector< vector<TableEntry> > > &scores,
     }
 
 	//	Error Check
-	if (a == 1 || b == 1 || c == 1) {
-		cout << "reached the end of the initTable function and nothing crashed" << endl;
-	}
-
-    // {
-    // cout << "-----------------" << endl;
-    // cout << "000: " << scores.at(0).at(0).at(0).s1 << 
-    //     scores.at(0).at(0).at(0).s2 << scores.at(0).at(0).at(0).s3
-    //     << endl;
-    // cout << "001: " << scores.at(0).at(0).at(1).s1 << 
-    //     scores.at(0).at(0).at(1).s2 << scores.at(0).at(0).at(1).s3
-    //     << endl;
-    // cout << "002: " << scores.at(0).at(0).at(2).s1 << 
-    //     scores.at(0).at(0).at(2).s2 << scores.at(0).at(0).at(2).s3
-    //     << endl;
-    // cout << "010: " << scores.at(0).at(1).at(0).s1 << 
-    //     scores.at(0).at(1).at(0).s2 << scores.at(0).at(1).at(0).s3
-    //     << endl;
-    // cout << "011: " << scores.at(0).at(1).at(1).s1 << 
-    //     scores.at(0).at(1).at(1).s2 << scores.at(0).at(1).at(1).s3
-    //     << endl;
-    // cout << "012: " << scores.at(0).at(1).at(2).s1 << 
-    //     scores.at(0).at(1).at(2).s2 << scores.at(0).at(1).at(2).s3
-    //     << endl;
-    // cout << "020: " << scores.at(0).at(2).at(0).s1 << 
-    //     scores.at(0).at(2).at(0).s2 << scores.at(0).at(2).at(0).s3
-    //     << endl;
-    // cout << "021: " << scores.at(0).at(2).at(1).s1 << 
-    //     scores.at(0).at(2).at(1).s2 << scores.at(0).at(2).at(1).s3
-    //     << endl;
-    // cout << "022: " << scores.at(0).at(2).at(2).s1 << 
-    //     scores.at(0).at(2).at(2).s2 << scores.at(0).at(2).at(2).s3
-    //     << endl;
-    // cout << endl;
-    // cout << "100: " << scores.at(1).at(0).at(0).s1 << 
-    //     scores.at(1).at(0).at(0).s2 << scores.at(1).at(0).at(0).s3
-    //     << endl;
-    // cout << "101: " << scores.at(1).at(0).at(1).s1 << 
-    //     scores.at(1).at(0).at(1).s2 << scores.at(1).at(0).at(1).s3
-    //     << endl;
-    // cout << "102: " << scores.at(1).at(0).at(2).s1 << 
-    //     scores.at(1).at(0).at(2).s2 << scores.at(1).at(0).at(2).s3
-    //     << endl;
-    // cout << "110: " << scores.at(1).at(1).at(0).s1 << 
-    //     scores.at(1).at(1).at(0).s2 << scores.at(1).at(1).at(0).s3
-    //     << endl;
-    // cout << "111: " << scores.at(1).at(1).at(1).s1 << 
-    //     scores.at(1).at(1).at(1).s2 << scores.at(1).at(1).at(1).s3
-    //     << endl;
-    // cout << "112: " << scores.at(1).at(1).at(2).s1 << 
-    //     scores.at(1).at(1).at(2).s2 << scores.at(1).at(1).at(2).s3
-    //     << endl;
-    // cout << "120: " << scores.at(1).at(2).at(0).s1 << 
-    //     scores.at(1).at(2).at(0).s2 << scores.at(1).at(2).at(0).s3
-    //     << endl;
-    // cout << "121: " << scores.at(1).at(2).at(1).s1 << 
-    //     scores.at(1).at(2).at(1).s2 << scores.at(1).at(2).at(1).s3
-    //     << endl;
-    // cout << "122: " << scores.at(1).at(2).at(2).s1 << 
-    //     scores.at(1).at(2).at(2).s2 << scores.at(1).at(2).at(2).s3
-    //     << endl;
-    // cout << "-------------------------" << endl;
-    // }
+//	if (a == 1 || b == 1 || c == 1) {
+//		cout << "reached the end of the initTable function and nothing crashed" << endl;
+//	}
 }
 
 //  Inputs: 3D array of scores, 3 sequences, 3 strings for results
 void DP(vector< vector< vector<TableEntry> > > scores, 
     string &res1, string &res2, string &res3) {
     
-	
     unsigned i, j, k;
     //  Add 1 to sizes to include dummy row/column
     	unsigned a = scores.size();
@@ -330,16 +263,13 @@ void DP(vector< vector< vector<TableEntry> > > scores,
 		cout << "Beginning of DP: Something happened in c\n";
 
 	//	Error Check
-	if (a == 1 || b == 1 || c == 1) {
-		cout << "Beginning DP with a degenerate string" << endl;
-	}	
-
-
+//	if (a == 1 || b == 1 || c == 1) {
+//		cout << "Beginning DP with a degenerate string" << endl;
+//	}	
 
     //  All possibilities of reccurence relation
     int xyz, x, y, z, xy, xz, yz;    
-    
-    
+      
     //  Recurrence Relation and filling the Table
     for (i = 1; i < a; ++i) {
         for (j = 1; j < b; ++j) {
@@ -368,8 +298,7 @@ void DP(vector< vector< vector<TableEntry> > > scores,
                 else {
                     xyz += mismatch2;
                 }
-                //  ----------------------------------------
-                
+                            
                 x = scores.at(i-1).at(j).at(k).val + 2*indel;
                 y = scores.at(i).at(j-1).at(k).val + 2*indel;
                 z = scores.at(i).at(j).at(k-1).val + 2*indel;
@@ -416,11 +345,8 @@ void DP(vector< vector< vector<TableEntry> > > scores,
         
     }
     
-	if (a == 1 || b == 1 || c == 1) {
-		cout << "Finished the recurrence relation and now beginning traceback with a degenerate string" << endl;
-	}
-
-
+//	if (a == 1 || b == 1 || c == 1)
+//		cout << "Finished the recurrence relation and now beginning traceback with a degenerate string" << endl;
     //  Just outputting to test
     // for (i = 0; i < a; ++i) {
     //     for (j = 0; j < b; ++j) {
@@ -516,14 +442,10 @@ void DP(vector< vector< vector<TableEntry> > > scores,
     }
     //cout << res1 << endl << res2 << endl << res3 << endl;
     //cout << "Leaving DP" << endl;
-    
-
 	//	Error Check
-	if (a == 1 || b == 1 || c == 1) {
-		cout << "Made it to the end of the DP function with no errors" << endl;
-	}
-
-
+//	if (a == 1 || b == 1 || c == 1) {
+//		cout << "Made it to the end of the DP function with no errors" << endl;
+//	}
 }
 
 //  Create the 2D matrices for space saving. Returns the final matrix
@@ -739,7 +661,6 @@ void spaceSavingDP( string seq1, string seq2, string seq3,
     res3 = str3 + res3 + str9;
     
 }
-
 
 int main() {
     
