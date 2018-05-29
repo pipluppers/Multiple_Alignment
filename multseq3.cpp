@@ -131,6 +131,7 @@ string maxPointer(int xyz, int x, int y, int z, int xy, int xz, int yz){
     }
 }
 
+//	Used for normal dynamic programming DP
 void initTable(vector< vector< vector<TableEntry> > > &scores,
     string seq1, string seq2, string seq3) {
     
@@ -623,9 +624,6 @@ void Create2DMat(vector< vector<TableEntry> > &vect,
 void spaceSavingDP( string seq1, string seq2, string seq3,
     string &res1, string &res2, string &res3) {
 
-    // scores.at(i).at(j).size() is the size of seq3
-    // scores.at(i).size() is the size of seq2
-    // scores.size() is the size of seq1
     unsigned i, j, k,m;
     unsigned a = seq1.size() + 1, b = seq2.size() + 1;
     unsigned c = seq3.size() + 1;
@@ -761,21 +759,25 @@ int main() {
 		cin >> setnum;
 	}
 	if (setnum == 1) {
+		cout << "Using set 1" << endl;
 		seq1 = fileSequences("OneOne.txt");
 		seq2 = fileSequences("OneTwo.txt");
 		seq3 = fileSequences("OneThree.txt");
 	}
 	else if (setnum == 2) {
+		cout << "Using set 2" << endl;
 		seq1 = fileSequences("TwoOne.txt");
 		seq2 = fileSequences("TwoTwo.txt");
 		seq3 = fileSequences("TwoThree.txt");
 	}
 	else if (setnum == 3) {
+		cout << "Using set 3" << endl;
 		seq1 = fileSequences("ThreeOne.txt");
 		seq2 = fileSequences("ThreeTwo.txt");
 		seq3 = fileSequences("ThreeThree.txt");
 	}
 	else if (setnum == 4) {
+		cout << "Using set 4" << endl;
 		seq1 = fileSequences("FourOne.txt");
 		seq2 = fileSequences("FourTwo.txt");
 		seq3 = fileSequences("FourThree.txt");
@@ -797,7 +799,6 @@ int main() {
     string result1 = "", result2 = "", result3 = "";    
     
     //initTable(A, seq1, seq2, seq3);
-    
     //DP(A, result1, result2, result3);
     
     spaceSavingDP(seq1, seq2, seq3, result1, result2, result3);
@@ -810,74 +811,82 @@ int main() {
 	cout << result3.size() << endl; 
     
     for (i = 0; i < length; ++i) {
-        if (result1.at(i) == result2.at(i) && 
+        //	AAA
+	if (result1.at(i) == result2.at(i) && 
             result2.at(i) == result3.at(i)) {
             ++counter;
             score += 3*match;
         }
+	//	AAG
         else if (result1.at(i) == result2.at(i) && 
             result1.at(i) != result3.at(i) && result1.at(i) != '-' &&
             result3.at(i) != '-') {
             score += match + 2*mismatch2; 
         }
+	//	AGA
         else if (result1.at(i) == result3.at(i) && 
             result1.at(i) != result2.at(i) && result1.at(i) != '-' &&
             result2.at(i) != '-') {
             score += match + 2*mismatch2; 
         }
+	//	GAA
         else if (result2.at(i) == result3.at(i) && 
             result1.at(i) != result3.at(i) && result1.at(i) != '-' &&
             result3.at(i) != '-') {
             score += match + 2*mismatch2; 
         }
         
-        
+        //	AGC
         else if (result1.at(i) != result2.at(i) && result3.at(i) != '-' &&
             result2.at(i) != result3.at(i) && result2.at(i) != '-' &&
             result3.at(i) != result1.at(i) && result1.at(i) != '-') {
             score += 3*mismatch2;
         }
         
+	//	AA-
         else if (result1.at(i) == result2.at(i) && 
             result2.at(i) != result3.at(i) && result2.at(i) != '-' &&
             result3.at(i) == '-') {
             score += match + 2*indel;
         }
+	//	A-A
         else if (result1.at(i) == result3.at(i) && 
-            result2.at(i) != result3.at(i) && result2.at(i) != '-' &&
-            result3.at(i) == '-') {
+            result2.at(i) != result3.at(i) && result3.at(i) != '-' &&
+            result2.at(i) == '-') {
             score += match + 2*indel;
         }
+	//	-AA
         else if (result2.at(i) == result3.at(i) && 
-            result1.at(i) != result3.at(i) && result1.at(i) != '-' &&
-            result3.at(i) == '-') {
+            result1.at(i) != result3.at(i) && result1.at(i) == '-' &&
+            result3.at(i) != '-') {
             score += match + 2*indel;
         }
-        
-        
-        
+       	
+	//	--A
         else if (result1.at(i) == result2.at(i) && 
-            result1.at(i) != result3.at(i) && result1.at(i) == '-' &&
-            result3.at(i) != '-') {
+            result1.at(i) != result3.at(i) && result1.at(i) == '-') {
             score += 2*indel;
         }
+	//	-A-
         else if (result1.at(i) == result3.at(i) && 
-            result1.at(i) != result2.at(i) && result1.at(i) == '-' &&
-            result2.at(i) != '-') {
+            result1.at(i) != result2.at(i) && result1.at(i) == '-') {
             score += 2*indel;
         }
+	//	A--
         else if (result2.at(i) == result3.at(i) && 
-            result1.at(i) != result3.at(i) && result1.at(i) == '-' &&
-            result3.at(i) != '-') {
+            result1.at(i) != result3.at(i) && result3.at(i) == '-') {
             score += 2*indel;
         }
 
+	//	-AC
         else if (result1.at(i) == '-' && result2.at(i) != result3.at(i) && result2.at(i) != result1.at(i) && result1.at(i) != result3.at(i)) {
 		score += 2*indel + mismatch2;
 	}
+	//	A-C
 	else if (result2.at(i) == '-' && result1.at(i) != result2.at(i) && result1.at(i) != result3.at(i) && result2.at(i) != result3.at(i)) {
 		score += 2*indel + mismatch2;
 	}
+	//	AC-
 	else if (result3.at(i) == '-' && result1.at(i) != result2.at(i) && result1.at(i) != result3.at(i) && result2.at(i) != result3.at(i)) {
 		score += 2*indel + mismatch2;
 	}
